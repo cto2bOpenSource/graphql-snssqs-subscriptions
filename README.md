@@ -2,9 +2,70 @@
 
 This package implements the PubSubEngine Interface from the [graphql-subscriptions](https://github.com/apollographql/graphql-subscriptions) package. Once initiated this library automatically create subscriptions between SNS and SQS by the given configuration.
 
-```
+```bash
 npm install -g graphql-snssqs-subscriptions
 ```
+
+## Usage
+
+```typescript
+
+// file pubsub.ts
+
+import { SNSSQSPubSub } from 'graphql-snssqs-subscriptions';
+import env from '../utils/env';
+
+export type SNSSQSPubSubType = SNSSQSPubSub;
+
+let awsEndpoints = {};
+
+if (!env.SERVICE_PRODUCTION) {
+  awsEndpoints = {
+    sns: {
+      endpoint: `${env.AWS_SNS_ENDPOINT}`,
+    },
+    sqs: {
+      endpoint: `${env.AWS_SQS_ENDPOINT}`,
+    },
+  };
+}
+
+export const getPubSub = async (): Promise<SNSSQSPubSub> => {
+  const pubsub = new SNSSQSPubSub(
+    {
+      accessKeyId: env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+      region: env.AWS_REGION,
+      ...awsEndpoints,
+    },
+    {
+      serviceName: env.SERVICE_NAME,
+    }
+  );
+  await pubsub.init();
+  return pubsub;
+};
+
+
+// file server.ts
+const bootstrap = async () => {
+  const pubSub = await getPubSub();
+
+  const server = new ApolloServer({
+    schema,
+    context: (req: any): MyServiceContext => ({
+      ...req,
+      pubSub, // ctx.pubsub will be available in your service context
+    }),
+  });
+
+  await server.listen(env.SERVICE_PORT);
+  logger.info(`Service is listening on port: ${env.SERVICE_PORT}`);
+};
+
+bootstrap().catch(logger.error);
+```
+
 
 ## Simple usage in graphql context with TypeGraphQL
 
