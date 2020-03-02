@@ -116,8 +116,8 @@ export class Resolver {
 
 ## Simple usage with TypeGraphQL and @node-ts/bus-workflow
 
-- More Info on graphql framework [TypeGraphQL]https://typegraphql.ml/docs/introduction.html
-- More Info on service bus framework [@node-ts/bus]https://github.com/node-ts/bus
+- More Info on graphql framework [TypeGraphQL](https://typegraphql.ml/docs/introduction.html)
+- More Info on service bus framework [@node-ts/bus](https://github.com/node-ts/bus)
 
 ![GraphQl and @node-ts/bus](./illustrations/sns-sqs-with-bus.png)
 
@@ -162,7 +162,7 @@ export class Resolver {
 
 ```typescript
 // Service2 Workflows
-...imports
+//...imports
 class SimpleMessageDTO {
   readonly $name = `${env.APP_DOMAIN}/${env.MY_SERVICE_NAME}/message-subject-or-anything`;
   readonly $version = 1;
@@ -185,7 +185,7 @@ export class MyWorkflow extends Workflow<MyWorkflowData> {
   }
 
   /**
-   * Starts a new workflow when a account has signed up
+   * Starts a new workflow smessage SimpleMewssageDTO is fired
    */
   @StartedBy<SimpleMessageDTO, MyWorkflowData, 'handleSimpleMessage'>(
     SimpleMessageDTO
@@ -224,7 +224,7 @@ export class MyWorkflow extends Workflow<MyWorkflowData> {
 - Automatically creates subscriptions from SNS to SQS.
 - Automatically creates Dead Letter Queues.
 - Automatically maps MessageAttributes
-- Fully compatable with [@node-ts/bus]https://www.npmjs.com/package/node-ts package
+- Fully compatable with [@node-ts/bus](https://www.npmjs.com/package/node-ts) package
 - Typescript Based
 
 ## Contributing
